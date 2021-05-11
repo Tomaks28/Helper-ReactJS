@@ -154,11 +154,7 @@ Webpack sert à bundle tout le code dans le fichier index.html dans le dossier b
 npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugin style-loader css-loader 
 ```
 
-Créer un fichier **webpack**
-
-```zsh
-touch webpack/webpack.common.js
-```
+Créer le fichier **webpack/webpack.common.js**
 
 Copier le code suivant. Explication :
 - il faut spécifier le fichier d'entrée de notre application (index.tsx)
@@ -217,14 +213,7 @@ module.exports = {
 }
 ```
 
-Créer un fichier **declaration.d.ts** à la racine
-
-```ts
-declare module "*.png"
-declare module "*.svg"
-```
-
-Créer un fichier **webpack/webpack.dev.js** et copier 
+Créer le fichier **webpack/webpack.dev.js** et copier 
 
 ```js
 const webpack = require('webpack')
@@ -246,6 +235,42 @@ module.exports = {
 }
 ```
 
+Créer le fichier **webpack/webpack.prod.js** et copier 
+
+```js
+import { DefinePlugin } from "webpack";
+
+export const mode = "production";
+export const devtool = "source-map";
+export const plugins = [
+  new DefinePlugin({
+    "process.env.name": JSON.stringify("Codevolution"),
+  }),
+];
+```
+
+
+Créer le fichier **webpack/webpack.config.js** et copier 
+
+```js
+import { merge } from "webpack-merge";
+import commonConfig from "./webpack.common.js";
+
+export default (envVars) => {
+  const { env } = envVars;
+  const envConfig = require(`./webpack.${env}.js`);
+  const config = merge(commonConfig, envConfig);
+  return config;
+};
+```
+
+Créer un fichier **declaration.d.ts** à la racine
+
+```ts
+declare module "*.png"
+declare module "*.svg"
+```
+
 
 10) scripts dans package.json
 
@@ -254,8 +279,7 @@ Ajouter le script suivant dans le fichier package.json
 ```json
 {
 "scripts": {
-"start": "",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "start": "webpack serve --config webpack/webpack.config.js --env env=dev",
+    "build": "webpack --config webpack/webpack.config.js --env env=prod",
 }
 ```
