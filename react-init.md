@@ -229,7 +229,7 @@ module.exports = {
   plugins: [
     new ReactRefreshWebpackPlugin(),
     new webpack.DefinePlugin({
-      'process.env.name': JSON.stringify('Vishwas'),
+      'process.env.mode': JSON.stringify('dev'),
     }),
   ],
 }
@@ -244,7 +244,7 @@ export const mode = "production";
 export const devtool = "source-map";
 export const plugins = [
   new DefinePlugin({
-    "process.env.name": JSON.stringify("Codevolution"),
+    "process.env.mode": JSON.stringify("prod"),
   }),
 ];
 ```
