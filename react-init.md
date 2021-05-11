@@ -151,7 +151,7 @@ Copier dans le fichier **.babelrc**
 Webpack sert à bundle tout le code dans le fichier index.html dans le dossier build
 
 ```
-npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugin style-loader css-loader 
+npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugin style-loader css-loader webpack-merge
 ```
 
 Créer le fichier **webpack/webpack.common.js**
@@ -257,10 +257,9 @@ import { merge } from "webpack-merge";
 import commonConfig from "./webpack.common.js";
 
 export default (envVars) => {
-  const { env } = envVars;
-  const envConfig = require(`./webpack.${env}.js`);
-  const config = merge(commonConfig, envConfig);
-  return config;
+  const { mode } = envVars;
+  const envConfig = require(`./webpack.${mode}.js`);
+  return merge(commonConfig, envConfig);
 };
 ```
 
